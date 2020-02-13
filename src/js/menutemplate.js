@@ -17,15 +17,19 @@ exports.buildMenuTemplate = function (win) {
                     id: 'file-open',
                     accelerator: 'CmdOrCtrl+O',
                     click() {
+                        console.log("clicked");
                         dialog.showOpenDialog(win, {
                             properties: ['openFile'],
                             filters: [
                                 { name: 'PDF Files', extensions: ['pdf'] }
                             ]
-                        }, (filename) => {
-                            if (filename) {
+                        })
+                        .then((data) => {
+                            const filePath = data.filePaths[0];
+                            console.log(filePath);
+                            if (filePath) {
                                 win.webContents.send('file-open',
-                                    filename.toString())
+                                filePath.toString())
                             }
                         })
                     }

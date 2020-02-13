@@ -26,6 +26,7 @@ function createWindow() {
         },
         frame: false
     });
+    win.webContents.openDevTools();
 
     // and load the index.html of the app.
     win.loadFile('./src/index.html');

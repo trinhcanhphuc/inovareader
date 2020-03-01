@@ -27,6 +27,7 @@
             this._currentTab = null;
             // Current bucket index
             this._currentBucket = 0;
+            this._currentTabIndex = 0;
             // Number of tabs in one bucket
             this._computeStepTabs();
 
@@ -34,6 +35,8 @@
             this._titleBar = this._getTitleBar();
 
             this._tabContainer = document.getElementById('tabContainer');
+            this._viewContainer = document.getElementById('viewContainer');
+            this._countViewerElements = 0;
             this._viewerElement = document.getElementById('viewer');
             this._leftSeekElement = document.getElementById('leftSeek');
             this._rightSeekElement =
@@ -136,7 +139,7 @@
          * @param {*} pathName
          */
         _createTabElement(pathName) {
-            const filename = pathName.substring(pathName.lastIndexOf('\\') + 1);
+            const filename = pathName.substring(pathName.lastIndexOf('/') + 1);
             const tabElement = document.createElement('div');
             const labelElement = document.createElement('div');
             const closeElement = document.createElement('div');
@@ -279,7 +282,16 @@
                 this._currentTab = tabElement;
                 this._updateTitle(this._paths[this._tabs.indexOf(tabElement)]);
                 this._adjustTabs();
-                this._focusCurrentTab();
+                // this._focusCurrentTab();
+                const frames = Array.prototype.slice.call(document.getElementsByClassName("viewer"));
+                console.log(tabElement.getAttribute('data-path'));
+                frames.forEach(element => {
+                    console.log(element.id);
+                    if (element.id == tabElement.getAttribute('data-path')) {
+                        element.style.display='block';
+                    }
+                    else element.style.display='none';
+                });
             }
         }
 
@@ -321,6 +333,13 @@
                 return;
             }
 
+            this._countViewerElements += 1;
+            this._viewerElement = document.createElement('iframe');
+            this._viewerElement.className = 'viewer';
+            this._viewerElement.id = pathName;
+            this._currentTabIndex = this._countViewerElements;
+            this._viewContainer.appendChild(this._viewerElement);
+
             const tabElement = this._createTabElement(pathName);
 
             this._currentTab = tabElement;
@@ -338,7 +357,7 @@
         _updateTitle(pathName) {
             if (pathName) {
                 this._titleBar.updateTitle(pathName.substring(
-                    pathName.lastIndexOf('\\') + 1) + " - Lector");
+                    pathName.lastIndexOf('/') + 1) + " - Lector");
             } else {
                 this._titleBar.updateTitle("Lector");
             }

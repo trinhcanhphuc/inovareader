@@ -1,7 +1,7 @@
 {
-    "name": "lector",
+    "name": "inova_reader",
     "version": "1.1.0",
-    "productName": "Lector",
+    "productName": "Inova Reader",
     "description": "A simple PDF Reader",
     "main": "src/js/main.js",
     "scripts": {
